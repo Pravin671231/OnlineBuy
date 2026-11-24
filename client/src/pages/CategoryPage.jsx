@@ -1,0 +1,37 @@
+import React from "react";
+import CategoryCard from "../components/products/CategoryCard";
+import { Link } from "react-router-dom";
+
+const CategoryPage = () => {
+  return (
+    <div className=" mx-auto px-2 py-10">
+      {/* Featured Products Header */}
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-secondary">
+            Categories page
+          </h1>
+          <p className="text-gray-500 mt-2">
+            Discover our latest and popular products.
+          </p>
+        </div>
+
+        <Link to="/shop" className="text-accent font-semibold hover:underline">
+          View All
+        </Link>
+      </div>
+
+      {/* Product Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <CategoryCard />
+        <CategoryCard />
+        <CategoryCard />
+        <CategoryCard />
+        <CategoryCard />
+        <CategoryCard />
+      </div>
+    </div>
+  );
+};
+
+export default CategoryPage;
