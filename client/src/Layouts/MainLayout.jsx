@@ -7,7 +7,7 @@ const MainLayout = () => {
     <>
       {/* navbar */}
       <Header />
-      <main className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen">
+      <main className="mx-auto w-full max-w-7xl py-10 px-4 sm:px-6 lg:px-8 min-h-screen">
         <Outlet />
       </main>
       {/* Footer */}
