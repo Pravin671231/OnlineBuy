@@ -1,7 +1,7 @@
 import React from "react";
 import CategorySection from "../components/homePage/CategorySection";
-import ProductSection from "./ProductSection";
 import HomeMainSection from "../components/homePage/HomeMainSection";
+import ProductSection from "../components/homePage/ProductSection";
 
 const HomePage = () => {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
-import { useProduct } from "../hooks/productHook";
-import ProductCard from "../components/products/ProductCard";
+import { useProduct } from "../../hooks/productHook";
+import ProductCard from "../products/ProductCard";
 
 const ProductSection = () => {
   const { data = [], isError, isLoading } = useProduct();
