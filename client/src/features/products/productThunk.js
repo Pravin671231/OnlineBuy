@@ -3,6 +3,7 @@ import {
   getAllCategories,
   getAllProducts,
   getByIdProduct,
+  getCategoryByName,
 } from "../../services/productService";
 
 export const fetchProducts = createAsyncThunk(
@@ -31,3 +32,26 @@ export const fetchProductById = createAsyncThunk(
   },
 );
 
+export const fetchCategories = createAsyncThunk(
+  "products/fetchCategories",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await getAllCategories();
+      return data;
+    } catch (error) {
+      rejectWithValue(error.response?.data?.message || error.message);
+    }
+  },
+);
+
+export const fetchCategoryByName = createAsyncThunk(
+  "products/fetchCategoryByName",
+  async (categoryName, { rejectWithValue }) => {
+    try {
+      const data = getCategoryByName(categoryName);
+      return data;
+    } catch (error) {
+      rejectWithValue(error.response?.data?.message || error.message);
+    }
+  },
+);

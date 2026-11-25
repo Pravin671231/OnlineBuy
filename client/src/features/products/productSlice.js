@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProductById, fetchProducts } from "./productThunk";
+import {
+  fetchCategories,
+  fetchCategoryByName,
+  fetchProductById,
+  fetchProducts,
+} from "./productThunk";
 
 const initialState = {
   data: [],
@@ -9,6 +14,14 @@ const initialState = {
   selecedProductLoading: false,
   selecedProduct: null,
   selecedProductError: null,
+
+  categories: [],
+  categoriesLoading: false,
+  categoriesError: null,
+
+  selectedCategory: null,
+  selectedCategoryLoading: false,
+  selectedCategoryError: null,
 };
 
 const productSlice = createSlice({
@@ -39,6 +52,32 @@ const productSlice = createSlice({
       })
       .addCase(fetchProductById.rejected, (state, action) => {
         state.selecedProductLoading = false;
+        state.selecedProductError = action.payload;
+      })
+      //   getCategories
+      .addCase(fetchCategories.pending, (state) => {
+        state.categoriesLoading = true;
+        state.categoriesError = null;
+      })
+      .addCase(fetchCategories.fulfilled, (state, action) => {
+        state.categoriesLoading = false;
+        state.categories = action.payload;
+      })
+      .addCase(fetchCategories.rejected, (state, action) => {
+        state.categoriesLoading = false;
+        state.categoriesError = action.payload;
+      })
+      // categoryByName
+      .addCase(fetchCategoryByName.pending, (state) => {
+        state.selectedCategoryLoading = true;
+        state.selectedCategoryError = null;
+      })
+      .addCase(fetchCategoryByName.fulfilled, (state, action) => {
+        state.selecedProductLoading = false;
+        state.selectedCategory = action.payload;
+      })
+      .addCase(fetchCategoryByName.rejected, (state, action) => {
+        state.selectedCategoryLoading = false;
         state.selecedProductError = action.payload;
       });
   },
