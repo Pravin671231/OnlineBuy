@@ -1,10 +1,6 @@
-
 import React from "react";
-import {
-  FaCartShopping,
-  FaHeart,
-  FaStar,
-} from "react-icons/fa6";
+import { FaCartShopping, FaHeart, FaStar } from "react-icons/fa6";
+import { useCart } from "../../hooks/cartHook";
 
 const ProductCard = ({ product = {} }) => {
   const {
@@ -18,10 +14,10 @@ const ProductCard = ({ product = {} }) => {
     discountPercentage = 0,
     reviews = [],
   } = product;
+  const { handleAddToCart } = useCart();
 
-  const discountPrice = (
-    price - (price * discountPercentage) / 100
-  ).toFixed(2);
+
+  const discountPrice = (price - (price * discountPercentage) / 100).toFixed(2);
 
   const productImage = images?.[0] || thumbnail;
 
@@ -29,10 +25,8 @@ const ProductCard = ({ product = {} }) => {
 
   return (
     <div className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg">
-
       {/* Product Image */}
       <div className="relative overflow-hidden bg-slate-50">
-
         <img
           src={productImage || "/placeholder.png"}
           alt={title || "Product"}
@@ -59,7 +53,6 @@ const ProductCard = ({ product = {} }) => {
 
       {/* Product Details */}
       <div className="flex flex-1 flex-col p-3 sm:p-4">
-
         {/* Product Title */}
         <h3 className="line-clamp-1 text-xs font-bold text-slate-900 transition-colors group-hover:text-primary sm:text-sm">
           {title}
@@ -99,13 +92,13 @@ const ProductCard = ({ product = {} }) => {
 
         {/* Add to Cart */}
         <button
+          onClick={() => handleAddToCart(product)}
           type="button"
           className="mt-auto flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-2.5 mt-4 text-[10px] font-semibold text-white transition hover:bg-accent sm:text-xs"
         >
           <FaCartShopping size={13} />
           Add to Cart
         </button>
-
       </div>
     </div>
   );
