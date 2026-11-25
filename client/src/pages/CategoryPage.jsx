@@ -1,36 +1,107 @@
-import React from "react";
-import CategoryCard from "../components/products/CategoryCard";
-import { Link } from "react-router-dom";
+
+import React, { useState } from "react";
+
+import CategoryMainSection from "../components/categoryPage/CategoryMainSection";
+import CategoryGridSection from "../components/categoryPage/CategoryGridSection";
+import CategoryNavigation from "../components/categoryPage/CategoryNavigation";
+
+import {
+  useCategories,
+  useCategoryName,
+  useProduct,
+} from "../hooks/productHook";
 
 const CategoryPage = () => {
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  // Fetch all products
+  const {
+    data = [],
+    loading: productsLoading,
+    error: productsError,
+  } = useProduct();
+
+  // Fetch categories
+  const {
+    categories = [],
+    categoriesError,
+    categoriesLoading,
+  } = useCategories();
+
+  // Fetch selected category products
+  const {
+    selectedCategory = [],
+    selectedCategoryLoading,
+    selecetedCategoryError,
+  } = useCategoryName(
+    activeCategory === "all" ? null : activeCategory
+  );
+
+  // Get selected category details
+  const currentCategory = categories.find(
+    (category) => category.slug === activeCategory
+  );
+
+  // Display products
+  const displayedProducts =
+    activeCategory === "all" ? data : selectedCategory;
+
+  // Handle products array
+  const productList = Array.isArray(displayedProducts)
+    ? displayedProducts
+    : displayedProducts?.products || [];
+
+  // Product count
+  const itemCount = productList.length;
+
+  // Loading and error states
+  // const isLoading =
+  //   activeCategory === "all"
+  //     ? productsLoading
+  //     : selectedCategoryLoading;
+
+  // const hasError =
+  //   activeCategory === "all"
+  //     ? productsError
+  //     : selecetedCategoryError;
+
+  // Dynamic header details
+  const categoryTitle =
+    activeCategory === "all"
+      ? "All Categories"
+      : currentCategory?.name || "Products";
+
+  const categoryDescription =
+    activeCategory === "all"
+      ? "Explore our complete collection of quality products across all departments."
+      : currentCategory?.description ||
+        `Explore our latest ${currentCategory?.name || "category"} collection and discover quality products.`;
+
   return (
-    <div className=" mx-auto px-2 py-10">
-      {/* Featured Products Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-secondary">
-            Categories page
-          </h1>
-          <p className="text-gray-500 mt-2">
-            Discover our latest and popular products.
-          </p>
-        </div>
+    <main className="min-h-screen bg-slate-50">
 
-        <Link to="/shop" className="text-accent font-semibold hover:underline">
-          View All
-        </Link>
-      </div>
+      {/* Category Header */}
+      <CategoryMainSection
+        title={categoryTitle}
+        description={categoryDescription}
+        itemCount={itemCount}
+      />
 
-      {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <CategoryCard />
-        <CategoryCard />
-        <CategoryCard />
-        <CategoryCard />
-        <CategoryCard />
-        <CategoryCard />
-      </div>
-    </div>
+      {/* Category Navigation */}
+      <CategoryNavigation
+        categories={categories}
+        selectedCategory={activeCategory}
+        onCategoryChange={setActiveCategory}
+      />
+
+      {/* Category Products */}
+      <CategoryGridSection
+        products={productList}
+        loading={categoriesLoading}
+        error={categoriesError}
+      />
+
+    </main>
   );
 };
 

@@ -47,11 +47,21 @@ export const useCategories = () => {
 export const useCategoryName = (categoryName) => {
   const dispatch = useDispatch();
 
-  const { selectedCategory, selectedCategoryLoading, selecetedCategoryError } =
-    useSelector((state) => state.products);
+  const {
+    selectedCategory,
+    selectedCategoryLoading,
+    selecetedCategoryError,
+  } = useSelector((state) => state.products);
+
   useEffect(() => {
+    if (!categoryName || categoryName === "all") return;
+
     dispatch(fetchCategoryByName(categoryName));
   }, [dispatch, categoryName]);
 
-  return { selecetedCategoryError, selectedCategory, selectedCategoryLoading };
+  return {
+    selecetedCategoryError,
+    selectedCategory,
+    selectedCategoryLoading,
+  };
 };

@@ -1,6 +1,6 @@
 import React from "react";
-import { useProduct } from "../hooks/productHook";
-import ProductCard from "../components/products/ProductCard";
+import { useProduct } from "../../hooks/productHook";
+import ProductCard from "../products/ProductCard";
 
 const ProductSection = () => {
   const { data = [], isError, isLoading } = useProduct();
@@ -34,9 +34,25 @@ const ProductSection = () => {
 
       {/* Loading State */}
       {isLoading && (
-        <div className="py-10 text-center text-sm text-slate-500">
-          Loading featured products...
-        </div>
+        <section className="w-full bg-slate-50 px-3 py-4 sm:px-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div
+                key={index}
+                className="animate-pulse overflow-hidden rounded-lg border border-slate-200 bg-white"
+              >
+                <div className="h-40 bg-slate-200" />
+
+                <div className="space-y-3 p-3">
+                  <div className="h-3 w-1/3 rounded bg-slate-200" />
+                  <div className="h-3 w-3/4 rounded bg-slate-200" />
+                  <div className="h-3 w-full rounded bg-slate-200" />
+                  <div className="h-6 w-1/2 rounded bg-slate-200" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* Error State */}
