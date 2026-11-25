@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../components/products/ProductCard";
+import { useProduct } from "../hooks/productHook";
 
 const HomePage = () => {
+  const { data, isError, isLoading } = useProduct();
+
   return (
     <div className=" mx-auto px-2 py-10">
       {/* Featured Products Header */}
@@ -23,11 +26,9 @@ const HomePage = () => {
 
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+        {data.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
       </div>
     </div>
   );
