@@ -1,3 +1,4 @@
+
 import { createSlice } from "@reduxjs/toolkit";
 import { getLocalStorage } from "../../utils/localStorage";
 
@@ -9,38 +10,45 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const item = action.payload;
-      console.log("cart item dispatch", item);
 
       const existingItem = state.cartItems.find(
-        (product) => product.id === item.id,
+        (product) => product.id === item.id
       );
 
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
+        const discountPrice =
+          item.price -
+          (item.price * item.discountPercentage) / 100;
+
         state.cartItems.push({
           ...item,
+          discountPrice: Number(discountPrice.toFixed(2)),
           quantity: 1,
         });
       }
     },
+
     removeToCart: (state, action) => {
       state.cartItems = state.cartItems.filter(
-        (item) => item.id !== action.payload,
+        (item) => item.id !== action.payload
       );
     },
+
     quantityIncrease: (state, action) => {
       const item = state.cartItems.find(
-        (product) => product.id === action.payload,
+        (product) => product.id === action.payload
       );
 
       if (item) {
         item.quantity += 1;
       }
     },
+
     quantityDecrease: (state, action) => {
       const item = state.cartItems.find(
-        (product) => product.id === action.payload,
+        (product) => product.id === action.payload
       );
 
       if (item && item.quantity > 1) {
@@ -51,5 +59,10 @@ const cartSlice = createSlice({
 });
 
 export default cartSlice.reducer;
-export const { addToCart, removeToCart, quantityDecrease, quantityIncrease } =
-  cartSlice.actions;
+
+export const {
+  addToCart,
+  removeToCart,
+  quantityDecrease,
+  quantityIncrease,
+} = cartSlice.actions;
