@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useProduct } from "../../hooks/productHook";
 import ProductCard from "../products/ProductCard";
+import { useDispatch } from "react-redux";
+import { toggleFavorite } from "../../features/favorites/favoritesSlice";
 
 const ProductSection = () => {
   const { data = [], isError, isLoading } = useProduct();
+
+  const dispacth = useDispatch();
+
+  
 
   return (
     <section className="mt-7 w-full bg-slate-50 px-4 py-7">
