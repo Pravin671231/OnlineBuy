@@ -1,6 +1,8 @@
+
 import React from "react";
 import { FaCartShopping, FaHeart, FaStar } from "react-icons/fa6";
 import { useCart } from "../../hooks/cartHook";
+import { useFavorites } from "../../hooks/useFavorites";
 
 const ProductCard = ({ product = {} }) => {
   const {
@@ -14,17 +16,28 @@ const ProductCard = ({ product = {} }) => {
     discountPercentage = 0,
     reviews = [],
   } = product;
+
   const { handleAddToCart } = useCart();
 
+  // Custom Favorites Hook
+  const {
+    isFavorite,
+    handleToggleFavorite,
+  } = useFavorites();
 
-  const discountPrice = (price - (price * discountPercentage) / 100).toFixed(2);
+  // Check favorite status
+  const favorite = isFavorite(id);
+
+  const discountPrice = (
+    price - (price * discountPercentage) / 100
+  ).toFixed(2);
 
   const productImage = images?.[0] || thumbnail;
-
   const reviewCount = reviews?.length || 0;
 
   return (
     <div className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg">
+
       {/* Product Image */}
       <div className="relative overflow-hidden bg-slate-50">
         <img
@@ -44,15 +57,24 @@ const ProductCard = ({ product = {} }) => {
         {/* Wishlist */}
         <button
           type="button"
-          aria-label="Add to wishlist"
-          className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-400 shadow-sm transition hover:text-red-500"
+          onClick={() => handleToggleFavorite(product)}
+          aria-label={
+            favorite ? "Remove from wishlist" : "Add to wishlist"
+          }
+          className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm transition"
         >
-          <FaHeart size={13} />
+          <FaHeart
+            size={13}
+            className={
+              favorite ? "text-red-500" : "text-slate-400"
+            }
+          />
         </button>
       </div>
 
       {/* Product Details */}
       <div className="flex flex-1 flex-col p-3 sm:p-4">
+
         {/* Product Title */}
         <h3 className="line-clamp-1 text-xs font-bold text-slate-900 transition-colors group-hover:text-primary sm:text-sm">
           {title}
@@ -94,7 +116,7 @@ const ProductCard = ({ product = {} }) => {
         <button
           onClick={() => handleAddToCart(product)}
           type="button"
-          className="mt-auto flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-2.5 mt-4 text-[10px] font-semibold text-white transition hover:bg-accent sm:text-xs"
+          className="mt-auto mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-2.5 text-[10px] font-semibold text-white transition hover:bg-accent sm:text-xs"
         >
           <FaCartShopping size={13} />
           Add to Cart

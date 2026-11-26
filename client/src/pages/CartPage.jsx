@@ -18,8 +18,8 @@ const CardPage = () => {
   const total = subtotal + shipping + tax;
 
   return (
-    <main className="min-h-screen bg-[#f7f9fc] px-3 py-6 sm:px-5 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <main className="">
+      <div className="">
 
         <CartHeaderSection />
 
