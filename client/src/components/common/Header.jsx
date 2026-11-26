@@ -2,81 +2,96 @@
 import { useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaRegUserCircle } from "react-icons/fa";
-import { HiMenu, HiX } from "react-icons/hi";
+import { FiSearch } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { useCart } from "../../hooks/cartHook";
 
 const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Shop", path: "/shop" },
-    { name: "Categories", path: "/categories" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
-  ];
+  const { cartItems = [] } = useCart();
+
+  const totalItems = cartItems.reduce(
+    (total, item) => total + Number(item.quantity || 0),
+    0
+  );
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    if (search.trim()) {
+      console.log("Search product:", search);
+    }
+  };
 
   return (
-    <header className="bg-secondary text-white font-bold">
-      <div className="px-4 py-3 flex justify-between items-center">
+    <header className="sticky top-0 z-50 bg-secondary font-bold text-white shadow-md">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
 
         {/* Logo */}
-        <Link to="/" className="text-2xl">
+        <Link to="/" className="shrink-0 text-2xl font-extrabold">
           Online<span className="text-accent">Buy</span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              className="hover:text-accent transition"
+        {/* Search Bar */}
+        <form
+          onSubmit={handleSearch}
+          className="mx-auto flex max-w-xl flex-1"
+        >
+          <div className="flex w-full overflow-hidden rounded-full bg-white">
+            <input
+              type="text"
+              placeholder="Search for products..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full min-w-0 px-4 py-2.5 text-sm font-normal text-gray-800 outline-none sm:px-5"
+            />
+
+            <button
+              type="submit"
+              className="flex items-center justify-center bg-accent px-4 text-white transition hover:opacity-90 sm:px-5"
+              aria-label="Search"
             >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
+              <FiSearch size={20} />
+            </button>
+          </div>
+        </form>
 
-        {/* Cart, User & Mobile Menu */}
-        <div className="flex items-center gap-5 text-xl">
+        {/* Cart & Account */}
+        <div className="flex shrink-0 items-center gap-3 sm:gap-5">
 
-          <Link to="/cart" className="hover:text-accent">
-            <FaCartShopping />
-          </Link>
-
-          <Link to="/profile" className="hover:text-accent">
-            <FaRegUserCircle />
-          </Link>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-2xl hover:text-accent"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle navigation"
-            aria-expanded={menuOpen}
+          {/* Cart */}
+          <Link
+            to="/cart"
+            className="flex items-center gap-2 transition hover:text-accent"
           >
-            {menuOpen ? <HiX /> : <HiMenu />}
-          </button>
+            <div className="relative">
+              <FaCartShopping className="text-xl sm:text-2xl" />
+
+              {totalItems > 0 && (
+                <span className="absolute -right-2.5 -top-2.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] text-white ring-2 ring-secondary">
+                  {totalItems > 10 ? "10+" : totalItems}
+                </span>
+              )}
+            </div>
+
+            <span className="hidden text-sm sm:block">Cart</span>
+          </Link>
+
+          {/* Divider */}
+          <div className="hidden h-8 w-px bg-white/20 sm:block" />
+
+          {/* Account */}
+          <Link
+            to="/profile"
+            className="flex items-center gap-2 transition hover:text-accent"
+          >
+            <FaRegUserCircle className="text-xl sm:text-2xl" />
+            <span className="hidden text-sm sm:block">Account</span>
+          </Link>
 
         </div>
       </div>
-
-      {/* Mobile Navigation */}
-      {menuOpen && (
-        <nav className="md:hidden flex flex-col gap-4 px-5 py-4 bg-secondary border-t border-white/20 ">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              onClick={() => setMenuOpen(false)}
-              className="hover:text-accent transition"
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
-      )}
     </header>
   );
 };
